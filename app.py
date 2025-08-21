@@ -14,9 +14,11 @@ if uploaded_files:
     response = requests.post('http://localhost:8000/predict/', files=files)
     if response.status_code == 200:
         results = response.json()['results']
+        cols = st.columns(3)
         for i, result in enumerate(results):
-            st.image(uploaded_files[i], caption=f"Prediction: {result['class']}", use_container_width=True)
-            st.write(f"Filename: {result['filename']}")
-            st.write(f"Predicted Class: {result['class']}")
+            with cols[i % 3]:
+                st.image(uploaded_files[i], caption=f"Prediction: {result['class']}", use_container_width=True)
+                st.write(f"Filename: {result['filename']}")
+                st.write(f"Predicted Class: {result['class']}")
     else:
         st.error('Prediction failed. Please check the FastAPI server.')

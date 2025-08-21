@@ -9,9 +9,7 @@ import uvicorn
 
 app = FastAPI()
 
-# Load your model (update path as needed)
-
-# Model definition (copied from notebook)
+# Model
 import torch.nn as nn
 class GarbageClassifier(nn.Module):
     def __init__(self):
@@ -53,8 +51,6 @@ class GarbageClassifier(nn.Module):
     def forward(self, x):
         return self.model(x)
 
-# Load model weights (update path as needed)
-
 model = GarbageClassifier()
 try:
     state_dict = torch.load('stat_dict.pt', map_location='cpu')
@@ -67,14 +63,13 @@ except RuntimeError as e:
     print(f"ERROR loading state_dict: {e}")
     raise
 
-# Define transforms (copied from notebook)
 transform = T.Compose([
     T.Resize((224, 224)),
     T.ToTensor(),
     T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
 
-# Class names (from notebook)
+# Trained class names
 class_names = ['cardboard', 'glass', 'metal', 'paper', 'plastic', 'trash']
 
 @app.post('/predict/')
